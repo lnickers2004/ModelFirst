@@ -8,6 +8,8 @@
         <EntityTypeShape EntityType="ModelFirstRecipes.Recipe" Width="2" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="ModelFirstRecipes.RecipeIngredient" Width="1.5" PointX="3.875" PointY="0.875" />
         <AssociationConnector Association="ModelFirstRecipes.RecipeRecipeIngredient" />
+        <EntityTypeShape EntityType="ModelFirstRecipes.RecipeStep" Width="1.5" PointX="6.375" PointY="1.375" />
+        <AssociationConnector Association="ModelFirstRecipes.RecipeRecipeStep" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

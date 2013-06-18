@@ -27,5 +27,6 @@ namespace ModelFirst
     
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+        public DbSet<RecipeStep> RecipeSteps { get; set; }
     }
 }

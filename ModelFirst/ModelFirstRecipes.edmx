@@ -19,6 +19,11 @@
             <End Role="Recipe" EntitySet="Recipes" />
             <End Role="RecipeIngredient" EntitySet="RecipeIngredients" />
           </AssociationSet>
+          <EntitySet Name="RecipeSteps" EntityType="ModelFirstRecipes.RecipeStep" />
+          <AssociationSet Name="RecipeRecipeStep" Association="ModelFirstRecipes.RecipeRecipeStep">
+            <End Role="Recipe" EntitySet="Recipes" />
+            <End Role="RecipeStep" EntitySet="RecipeSteps" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Recipe">
           <Key>
@@ -28,6 +33,7 @@
           <Property Type="String" Name="RecipeName" Nullable="false" />
           <Property Type="String" Name="Headnote" Nullable="false" />
           <NavigationProperty Name="RecipeIngredients" Relationship="ModelFirstRecipes.RecipeRecipeIngredient" FromRole="Recipe" ToRole="RecipeIngredient" />
+          <NavigationProperty Name="RecipeSteps" Relationship="ModelFirstRecipes.RecipeRecipeStep" FromRole="Recipe" ToRole="RecipeStep" />
         </EntityType>
         <EntityType Name="RecipeIngredient">
           <Key>
@@ -51,6 +57,19 @@
               <PropertyRef Name="RecipeId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RecipeStep">
+          <Key>
+            <PropertyRef Name="StepNumber" />
+          </Key>
+          <Property Type="Int32" Name="StepNumber" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="RecipeID" Nullable="false" />
+          <Property Type="String" Name="Text" Nullable="false" />
+          <NavigationProperty Name="Recipe" Relationship="ModelFirstRecipes.RecipeRecipeStep" FromRole="RecipeStep" ToRole="Recipe" />
+        </EntityType>
+        <Association Name="RecipeRecipeStep">
+          <End Type="ModelFirstRecipes.Recipe" Role="Recipe" Multiplicity="1" />
+          <End Type="ModelFirstRecipes.RecipeStep" Role="RecipeStep" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>

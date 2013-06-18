@@ -12,19 +12,12 @@ namespace ModelFirst
     using System;
     using System.Collections.Generic;
     
-    public partial class Recipe
+    public partial class RecipeStep
     {
-        public Recipe()
-        {
-            this.RecipeIngredients = new HashSet<RecipeIngredient>();
-            this.RecipeSteps = new HashSet<RecipeStep>();
-        }
+        public int StepNumber { get; set; }
+        public int RecipeID { get; set; }
+        public string Text { get; set; }
     
-        public int RecipeId { get; set; }
-        public string RecipeName { get; set; }
-        public string Headnote { get; set; }
-    
-        public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; }
-        public virtual ICollection<RecipeStep> RecipeSteps { get; set; }
+        public virtual Recipe Recipe { get; set; }
     }
 }
