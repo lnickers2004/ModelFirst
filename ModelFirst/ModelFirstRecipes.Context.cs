@@ -25,5 +25,6 @@ namespace ModelFirst
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<Recipe> Recipes { get; set; }
     }
 }
