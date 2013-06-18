@@ -4,11 +4,72 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="ModelFirstRecipes.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="ModelFirstRecipesTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="ModelFirstRecipes.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelFirstRecipesStoreContainer">
+    <EntitySet Name="Recipes" EntityType="ModelFirstRecipes.Store.Recipes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RecipeIngredients" EntityType="ModelFirstRecipes.Store.RecipeIngredients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RecipeSteps" EntityType="ModelFirstRecipes.Store.RecipeSteps" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="RecipeRecipeIngredient" Association="ModelFirstRecipes.Store.RecipeRecipeIngredient">
+      <End Role="Recipe" EntitySet="Recipes" />
+      <End Role="RecipeIngredient" EntitySet="RecipeIngredients" />
+    </AssociationSet>
+    <AssociationSet Name="RecipeRecipeStep" Association="ModelFirstRecipes.Store.RecipeRecipeStep">
+      <End Role="Recipe" EntitySet="Recipes" />
+      <End Role="RecipeStep" EntitySet="RecipeSteps" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Recipes">
+    <Key>
+      <PropertyRef Name="RecipeId" />
+    </Key>
+    <Property Name="RecipeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecipeName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Headnote" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RecipeIngredients">
+    <Key>
+      <PropertyRef Name="IngredientId" />
+    </Key>
+    <Property Name="IngredientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecipeId" Type="int" Nullable="false" />
+    <Property Name="Preparation" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Amount" Type="int" Nullable="false" />
+    <Property Name="Unit" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RecipeSteps">
+    <Key>
+      <PropertyRef Name="StepNumber" />
+    </Key>
+    <Property Name="StepNumber" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecipeID" Type="int" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Recipe_RecipeId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="RecipeRecipeIngredient">
+    <End Role="Recipe" Type="ModelFirstRecipes.Store.Recipes" Multiplicity="1" />
+    <End Role="RecipeIngredient" Type="ModelFirstRecipes.Store.RecipeIngredients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Recipe">
+        <PropertyRef Name="RecipeId" />
+      </Principal>
+      <Dependent Role="RecipeIngredient">
+        <PropertyRef Name="RecipeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RecipeRecipeStep">
+    <End Role="Recipe" Type="ModelFirstRecipes.Store.Recipes" Multiplicity="1" />
+    <End Role="RecipeStep" Type="ModelFirstRecipes.Store.RecipeSteps" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Recipe">
+        <PropertyRef Name="RecipeId" />
+      </Principal>
+      <Dependent Role="RecipeStep">
+        <PropertyRef Name="Recipe_RecipeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ModelFirstRecipes" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
@@ -75,13 +136,47 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="ModelFirstRecipes" />
-        <Alias Key="Target" Value="ModelFirstRecipes.Store" />
-        <EntityContainerMapping CdmEntityContainer="ModelFirstRecipesContainer" StorageEntityContainer="ModelFirstRecipesTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelFirstRecipesStoreContainer" CdmEntityContainer="ModelFirstRecipesContainer">
+    <EntitySetMapping Name="Recipes">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFirstRecipes.Recipe)">
+        <MappingFragment StoreEntitySet="Recipes">
+          <ScalarProperty Name="RecipeId" ColumnName="RecipeId" />
+          <ScalarProperty Name="RecipeName" ColumnName="RecipeName" />
+          <ScalarProperty Name="Headnote" ColumnName="Headnote" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RecipeIngredients">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFirstRecipes.RecipeIngredient)">
+        <MappingFragment StoreEntitySet="RecipeIngredients">
+          <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+          <ScalarProperty Name="RecipeId" ColumnName="RecipeId" />
+          <ScalarProperty Name="Preparation" ColumnName="Preparation" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Unit" ColumnName="Unit" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RecipeSteps">
+      <EntityTypeMapping TypeName="IsTypeOf(ModelFirstRecipes.RecipeStep)">
+        <MappingFragment StoreEntitySet="RecipeSteps">
+          <ScalarProperty Name="StepNumber" ColumnName="StepNumber" />
+          <ScalarProperty Name="RecipeID" ColumnName="RecipeID" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="RecipeRecipeStep" TypeName="ModelFirstRecipes.RecipeRecipeStep" StoreEntitySet="RecipeSteps">
+      <EndProperty Name="Recipe">
+        <ScalarProperty Name="RecipeId" ColumnName="Recipe_RecipeId" />
+      </EndProperty>
+      <EndProperty Name="RecipeStep">
+        <ScalarProperty Name="StepNumber" ColumnName="StepNumber" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
