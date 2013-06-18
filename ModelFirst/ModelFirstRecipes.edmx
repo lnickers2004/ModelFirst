@@ -14,6 +14,11 @@
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ModelFirstRecipes" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="ModelFirstRecipesContainer" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Recipes" EntityType="ModelFirstRecipes.Recipe" />
+          <EntitySet Name="RecipeIngredients" EntityType="ModelFirstRecipes.RecipeIngredient" />
+          <AssociationSet Name="RecipeRecipeIngredient" Association="ModelFirstRecipes.RecipeRecipeIngredient">
+            <End Role="Recipe" EntitySet="Recipes" />
+            <End Role="RecipeIngredient" EntitySet="RecipeIngredients" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Recipe">
           <Key>
@@ -22,7 +27,31 @@
           <Property Type="Int32" Name="RecipeId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="RecipeName" Nullable="false" />
           <Property Type="String" Name="Headnote" Nullable="false" />
+          <NavigationProperty Name="RecipeIngredients" Relationship="ModelFirstRecipes.RecipeRecipeIngredient" FromRole="Recipe" ToRole="RecipeIngredient" />
         </EntityType>
+        <EntityType Name="RecipeIngredient">
+          <Key>
+            <PropertyRef Name="IngredientId" />
+          </Key>
+          <Property Type="Int32" Name="IngredientId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="RecipeId" Nullable="false" />
+          <Property Type="String" Name="Preparation" Nullable="false" />
+          <Property Type="Int32" Name="Amount" Nullable="false" />
+          <Property Type="Int32" Name="Unit" Nullable="false" />
+          <NavigationProperty Name="Recipe" Relationship="ModelFirstRecipes.RecipeRecipeIngredient" FromRole="RecipeIngredient" ToRole="Recipe" />
+        </EntityType>
+        <Association Name="RecipeRecipeIngredient">
+          <End Type="ModelFirstRecipes.Recipe" Role="Recipe" Multiplicity="1" />
+          <End Type="ModelFirstRecipes.RecipeIngredient" Role="RecipeIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recipe">
+              <PropertyRef Name="RecipeId" />
+            </Principal>
+            <Dependent Role="RecipeIngredient">
+              <PropertyRef Name="RecipeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

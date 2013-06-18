@@ -68,6 +68,9 @@
     <Compile Include="Recipe.cs">
       <DependentUpon>ModelFirstRecipes.tt</DependentUpon>
     </Compile>
+    <Compile Include="RecipeIngredient.cs">
+      <DependentUpon>ModelFirstRecipes.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
